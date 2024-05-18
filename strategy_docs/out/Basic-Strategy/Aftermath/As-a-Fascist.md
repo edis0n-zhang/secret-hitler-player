@@ -1,0 +1,6 @@
+#### As a Fascist
+
+The aftermath is a key place for Fascists to inject chaos into the game.  Telling the truth can gain you trust, but subtly changing the story can pay off later in the game. For example, if you draw 1L2F as a President and pass 1L1F to the Chancellor, it often makes sense to claim you drew 2L1F, as it will create the illusion that there are less Liberals in the deck then there actually are. This will make it easier for other Fascist players to justify Liberal policy discards until the cards are shuffled.
+
+If you give a Liberal Chancellor 2F, then you need to decide whether to say you drew 3F, or that you gave the player a choice and they discarded a Liberal policy. This can be even more profitable if you say that you drew 2L1F, discarded a Liberal to give them a choice, and were then betrayed, as this creates chaos *and* increases Liberal discard viability. If you decide to lie and throw the player under the bus, you need to be able to sell it with your body language and reaction as well.  This can only really be learned by trying it out and watching how experienced players act. Note that in a high player-count game you may find yourself cut out of the game if there isn't a lot of distrust already planted, so carefully consider whether the benefit is worth the soft elimination.
+

@@ -1,0 +1,6 @@
+#### As a Fascist
+
+As a Fascist, you are one of the few players who has full knowledge of everyone's roles. However, you must be careful not to give away too much information with your nominations. At the early stages of the game when few governments have gone through, it is often best to stay undercover.  One option is to not take sides and pick chancellors that the group considers reasonable. Sometimes this will allow you to put two Fascists into a government, but don't worry too much if it doesn't happen.
+
+After the placement of three Fascist policies, you must be more aware of your nominations. At this stage, watch out for Liberal players hunting for suspicious actions; if the other players are experienced, then all it takes is one bad vote to give yourself and Hitler away. As a Fascist, you must balance up your desire to nominate Hitler or a fellow Fascist with hiding your identity by putting through sub-optimal governments.  All it takes to spoil trust gained for Hitler in the early stages of the game is for a Fascist to be too eager to get them nominated. You must also gauge the group's suspicion of you at this stage and you may instead try to shift it onto unsuspecting Liberals, perhaps by acting as if a Liberal is Hitler by nominating them or voting for them when it is seemingly illogical to do so.
+
