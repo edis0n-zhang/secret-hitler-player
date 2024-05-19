@@ -12,12 +12,12 @@ class HitlerPlayer(object):
         self.hitler = None
         self.fascists = None # known fascists
         self.is_dead = False
-        self.inspected_players = {}
+        self.inspected_players = ""
         self.monologue = ""
         self.game_log = game_log
         self.chat_log = chat_log
 
-    def get_completion(self, prompt, stage):
+    def get_completion(self, prompt, stage=""):
 
         strategy_embedding = openai_client.embeddings.create(
             model="text-embedding-3-large",
@@ -211,6 +211,7 @@ LLM response: {response}
 
         prompt = f'''
         It is now your turn to nominate a chancellor.
+
         Here is the state of the board. You may pick any one of the players, EXCEPT yourself and the previous chancellor (labeled as chancellor)
 
         {self.get_known_state()}
@@ -314,7 +315,9 @@ LLM response: {response}
         Choose a person's party membership to inspect
         :return:
         """
-        prompt = f'''It is now your turn. You must use your executive power to inspect someone's party membership. The current state of the game is as follows:
+        prompt = f'''It is now your turn. You must use your executive power to inspect someone's party membership. You should note that the player you inspect and their party membership will be revealed to you and only you. It is up to you to share this information with the other players.
+
+        The current state of the game is as follows:
 
         {self.get_known_state()}
 
@@ -331,7 +334,7 @@ LLM response: {response}
         You should NOT inspect yourself, as you already know your own party membership.
         '''
 
-        response = self.get_completion(prompt)
+        response = self.get_completion(prompt, "Inspect Player")
 
         print(f"""
 ----------------------------
