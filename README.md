@@ -8,4 +8,4 @@ We made LLMs play the popular deception game Secret Hitler.
 4. Gave a history of the discussions between players (discussed before voting and after enacting a policy)
 
 # Tech Stack
-[!techstack.jpeg]
+![Tech Stack](techstack.jpeg)
