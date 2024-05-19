@@ -1,7 +1,9 @@
 from HitlerConstants import players, board
+from HitlerPlayer import Ja, Nein
 from random import shuffle
 import HitlerPolicy
 import HitlerRole
+import HitlerPlayer
 
 
 class HitlerBoard(object):
@@ -97,3 +99,22 @@ class HitlerState(object):
         self.last_votes = []
         self.players = []
         self.veto = False
+
+    def __str__(self):
+        formatted_players = "\n        ".join([str(player) for player in self.players])
+        # print(self.players)
+        return f"""
+-----------------------------------
+liberal policies enacted: {self.liberal_track}
+fascist policies enacted: {self.fascist_track}
+failed votes: {self.failed_votes}
+president: {self.president}
+ex-president: {self.ex_president}
+chosen president: {self.chosen_president}
+chancellor: {self.chancellor}
+most recent policy: {self.most_recent_policy}
+last votes: {['Ja' if isinstance(vote, Ja) else 'Nein' for vote in self.last_votes]}
+players:{formatted_players}
+veto: {self.veto}
+-----------------------------------
+"""

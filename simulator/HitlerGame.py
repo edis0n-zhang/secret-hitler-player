@@ -1,7 +1,21 @@
 from HitlerBoard import HitlerBoard, HitlerState
 from HitlerPlayer import DumbPlayer
 from random import randint
+import sys
+import random
 
+class DualOutput:
+    def __init__(self, file):
+        self.terminal = sys.stdout
+        self.file = file
+
+    def write(self, message):
+        self.terminal.write(message)
+        self.file.write(message)
+
+    def flush(self):
+        self.terminal.flush()
+        self.file.flush()
 
 class HitlerGame(object):
     def __init__(self, playernum=0):
@@ -10,6 +24,9 @@ class HitlerGame(object):
         self.hitler = None
         self.board = None
         self.state = HitlerState()
+        self.turn_count = 0
+        self.game_log = []
+        self.chat_log = [""]
 
     def play(self):
         """Main game loop"""
@@ -20,7 +37,18 @@ class HitlerGame(object):
         loop_game = True
 
         while loop_game:
+            self.turn_count += 1
+            self.log = "Turn " + str(self.turn_count) + "\n"
+            self.vote_count = [0, 0]
             loop_game = not self.turn()
+            self.log += "-----------------------------------\n"
+            print("CURRENT LOG:")
+            print(self.log)
+            print("---------------------------")
+            print("CURRENT CHAT LOG:")
+            print(self.chat_log[0])
+            print("---------------------------")
+            self.game_log.append(self.log)
 
         #print("Game's over!")
         return self.finish_game()
@@ -35,13 +63,24 @@ class HitlerGame(object):
         # Ask the president to nominate a chancellor
         self.state.chancellor = self.nominate_chancellor()
 
+        # DISCUSS HERE
+        chat = "Discussion Before Voting:\n"
+        indices = [_ for _ in range(len(self.state.players))]
+        random.shuffle(indices)
+        for i in indices:
+            player = self.state.players[i]
+            chat += f"{str(player)}: {player.discuss(chat, "before_voting")}\n\n"
+
+        self.chat_log[0] = chat
+
         # Ask the players to vote whether they want this pairing
         voted = self.voting()
 
         if not voted:
-            #print("Vote failed!")
+            self.log += f"Vote failed: {self.vote_count[0]} voted JA to {self.vote_count[1]} voted NEIN\n"
             action_enacted = self.vote_failed()
         else:
+            self.log += f"Vote passed: {self.vote_count[0]} voted JA to {self.vote_count[1]} voted NEIN\n"
             # Possibility to win if Hitler is chancellor and more than 2 fascist policies enacted.
             if self.hitler_chancellor_win():
                 return True
@@ -49,6 +88,17 @@ class HitlerGame(object):
             action_enacted = self.vote_passed()
 
         if action_enacted:
+            # DISCUSS HERE
+            chat = "Discussion After Policy Enactment:\n"
+
+            indices = [_ for _ in range(len(self.state.players))]
+            random.shuffle(indices)
+            for i in indices:
+                player = self.state.players[i]
+                chat += f"{str(player)}: {player.discuss(chat, "after_policy")}\n\n"
+
+            self.chat_log[0] = chat
+
             self.perform_vote_action()
 
         if self.policy_win():
@@ -72,7 +122,9 @@ class HitlerGame(object):
             player = DumbPlayer(num,
                                 name,
                                 roles.pop(0),
-                                self.state)
+                                self.state,
+                                self.game_log,
+                                self.chat_log)
 
             if player.is_hitler:
                 # Keep track of Hitler
@@ -135,8 +187,10 @@ class HitlerGame(object):
         for vote in self.state.last_votes:
             if vote:
                 positivity += 1
+                self.vote_count[0] += 1
             else:
                 positivity -= 1
+                self.vote_count[1] += 1
 
         return positivity > 0
 
@@ -166,11 +220,12 @@ class HitlerGame(object):
         if (self.state.veto and
                 self.state.chancellor.chancellor_veto(take) and
                 self.state.president.president_veto()):
-            #print("Vote vetoed!")
+            self.log += f"Veto enacted by President {self.state.president} and Chancellor {self.state.chancellor})\n"
             return self.vote_failed()
 
         (enact, discard) = self.state.chancellor.enact_policy(take)
         self.board.discards.append(discard)
+        self.log += f"{str(enact)} policy enacted by President {self.state.president} and Chancellor {self.state.chancellor})\n"
         return self.board.enact_policy(enact)
 
     def hitler_chancellor_win(self):
@@ -202,7 +257,7 @@ class HitlerGame(object):
         elif action == "inspect":
             inspect = self.state.president.inspect_player()
             while inspect.is_dead or inspect == self.state.president:
-                self.state.president.inspected_players[inspect] = inspect.role.party_membership
+                self.state.president.inspected_players = f'{inspect.name} is a {inspect.role.party_membership}'
 
         elif action == "choose":
             chosen = self.state.president
@@ -216,40 +271,45 @@ class HitlerGame(object):
 
     def finish_game(self):
         if self.hitler_chancellor_win():
-            #print("Fascists win by electing Hitler!")
+            print("Fascists win by electing Hitler!")
             return -2
 
         elif self.policy_win():
             if self.state.liberal_track == 5:
-                #print("Liberals win by policy!")
+                print("Liberals win by policy!")
                 return 1
             else:
-                #print("Fascists win by policy!")
+                print("Fascists win by policy!")
                 return -1
 
         elif self.hitler.is_dead:
-            #print("Liberals win by shooting Hitler!")
+            print("Liberals win by shooting Hitler!")
             return 2
 
 
 def newgame():
-    game = HitlerGame(10)
+    game = HitlerGame(7)
     return game.play()
 
 
 if __name__ == "__main__":
-    games = {"Liberal_policy": 0, "Liberal_kill_Hitler": 0, "Fascist_policy": 0, "Fascist_elect_Hitler": 0}
-    for ii in range(100000):
-        r = newgame()
-        if r == -2:
-            games["Fascist_elect_Hitler"] += 1
-        elif r == -1:
-            games["Fascist_policy"] += 1
-        elif r == 1:
-            games["Liberal_policy"] += 1
-        elif r == 2:
-            games["Liberal_kill_Hitler"] += 1
+    # games = {"Liberal_policy": 0, "Liberal_kill_Hitler": 0, "Fascist_policy": 0, "Fascist_elect_Hitler": 0}
+    # for ii in range(100000):
+        # r = newgame()
+    #     if r == -2:
+    #         games["Fascist_elect_Hitler"] += 1
+    #     elif r == -1:
+    #         games["Fascist_policy"] += 1
+    #     elif r == 1:
+    #         games["Liberal_policy"] += 1
+    #     elif r == 2:
+    #         games["Liberal_kill_Hitler"] += 1
 
-    print(games)
-    print(str(games["Liberal_policy"] + games["Liberal_kill_Hitler"]) + ":" +
-          str(games["Fascist_policy"] + games["Fascist_elect_Hitler"]))
+    # print(games)
+    # print(str(games["Liberal_policy"] + games["Liberal_kill_Hitler"]) + ":" +
+    #       str(games["Fascist_policy"] + games["Fascist_elect_Hitler"]))
+    with open('output.txt', 'w') as f:
+            dual_output = DualOutput(f)
+            sys.stdout = dual_output
+            game = newgame()
+            sys.stdout = sys.__stdout__

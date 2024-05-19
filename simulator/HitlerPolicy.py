@@ -5,6 +5,9 @@ class Policy(object):
     def __repr__(self):
         return self.type.title()
 
+    def __str__(self):
+        return self.type.title()
+
 
 class Liberal(Policy):
     def __init__(self):
