@@ -8,6 +8,8 @@ We made LLMs play the popular deception game Secret Hitler.
 4. Gave a history of the discussions between players (discussed before voting and after enacting a policy)
 
 # How to Run
+Place your openai key in a .env file in the simulator folder: `OPENAI_API_KEY="INSERT YOUR KEY HERE"`
+
 Clone the repository, `cd` into simulator, and run `python HitlerGame.py`.
 
 # Tech Stack
