@@ -7,7 +7,13 @@ We made LLMs play the popular deception game Secret Hitler.
 3. The rules of the stage and their goal
 4. Gave a history of the discussions between players (discussed before voting and after enacting a policy)
 
+# How to Run
+Clone the repository, `cd` into simulator, and run `python HitlerGame.py`.
+
 # Tech Stack
+1. Pinecone Vector DB
+2. OpenAI Embeddings + GPT-4o
+
 ![Tech Stack](techstack.png)
 
 # Credits
