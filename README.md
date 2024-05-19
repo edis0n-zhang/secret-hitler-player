@@ -1,4 +1,4 @@
-<img width="979" alt="techstack" src="https://github.com/edis0n-zhang/secret-hitler-player/assets/115107294/e94e0c73-5a17-44a9-86d8-67446d870be3"># What We Did
+# What We Did
 We made LLMs play the popular deception game Secret Hitler.
 
 # How We Did It
